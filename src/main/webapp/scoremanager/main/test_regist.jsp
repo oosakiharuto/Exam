@@ -6,7 +6,6 @@
         <section class="me-4">
             <h2 class="h3 mb-3 fw-normal bg-secondary bg-opacity-10 py-2 px-4">成績管理（登録）</h2>
             <div class="px-4">
-                <%-- 検索条件の指定（科目、クラス、回数） --%>
                 <form action="TestRegist.action" method="get" class="row border-bottom pb-3 mb-4">
                     <div class="col-3">
                         <label class="form-label">科目</label>
@@ -37,32 +36,28 @@
                     </div>
                 </form>
 
-                <%-- 学生リストがある場合のみ入力フォームを表示 --%>
-                <c:if test="${not empty students}">
+                <c:if test="${not empty tests}">
                     <form action="TestRegistExecute.action" method="post">
                         <input type="hidden" name="subject_cd" value="${param.subject_cd}">
                         <input type="hidden" name="class_num" value="${param.class_num}">
                         <input type="hidden" name="no" value="${param.no}">
                         
                         <table class="table table-hover table-striped">
-                            <thead>
-                                <tr>
-                                    <th>学生番号</th>
-                                    <th>氏名</th>
-                                    <th>点数</th>
-                                </tr>
-                            </thead>
+                            <thead><tr><th>学生番号</th><th>氏名</th><th>点数</th></tr></thead>
                             <tbody>
-                                <c:forEach var="student" items="${students}">
+                                <c:forEach var="test" items="${tests}">
                                     <tr>
-                                        <td>${student.no}<input type="hidden" name="student_no" value="${student.no}"></td>
-                                        <td>${student.name}</td>
-                                        <td><input type="number" name="point" class="form-control" min="0" max="100" value="${student.point}"></td>
+                                        <td>${test.student.no}<input type="hidden" name="student_no" value="${test.student.no}"></td>
+                                        <td>${test.student.name}</td>
+                                        <td>
+                                            <%-- 点数が未登録（-1）の場合は空欄にする --%>
+                                            <input type="number" name="point" class="form-control" min="0" max="100" value="${test.point == -1 ? '' : test.point}">
+                                        </td>
                                     </tr>
                                 </c:forEach>
                             </tbody>
                         </table>
-                        <button type="submit" class="btn btn-primary">一括登録</button>
+                        <button type="submit" class="btn btn-primary mt-3">一括登録</button>
                     </form>
                 </c:if>
             </div>
