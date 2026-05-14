@@ -10,6 +10,8 @@ import bean.ClassNum;
 import bean.School;
 
 public class ClassNumDao extends Dao {
+    
+    // クラスを登録する処理
     public boolean save(ClassNum classNum) throws Exception {
         Connection connection = getConnection();
         PreparedStatement statement = null;
@@ -20,8 +22,6 @@ public class ClassNumDao extends Dao {
             statement.setString(1, classNum.getSchool().getCd());
             statement.setString(2, classNum.getClassNum());
             count = statement.executeUpdate();
-        } catch (Exception e) {
-            throw e;
         } finally {
             if (statement != null) statement.close();
             connection.close();
@@ -29,6 +29,7 @@ public class ClassNumDao extends Dao {
         return count > 0;
     }
 
+    // ★ここでエラーになっていた「クラス一覧を取得する（filter）処理」★
     public List<String> filter(School school) throws Exception {
         List<String> list = new ArrayList<>();
         Connection connection = getConnection();
@@ -42,8 +43,6 @@ public class ClassNumDao extends Dao {
             while (rSet.next()) {
                 list.add(rSet.getString("CLASS_NUM"));
             }
-        } catch (Exception e) {
-            throw e;
         } finally {
             if (rSet != null) rSet.close();
             if (statement != null) statement.close();
